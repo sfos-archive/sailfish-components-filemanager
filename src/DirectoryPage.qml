@@ -285,31 +285,53 @@ Page {
                     }
                 }
             }
-        }
-    }
+            property var busyView: Loader {
+                parent: __silica_applicationwindow_instance
+                active: FileEngine.busy
+                onActiveChanged: active = true // remove binding
+                anchors.fill: parent
 
-    Rectangle {
-        anchors.fill: parent
-        enabled: FileEngine.busy
-        opacity: FileEngine.busy ? 1.0 : 0.0
-        color: Theme.rgba("black",  0.9)
-        Behavior on opacity { FadeAnimator { duration: 400 } }
-        TouchBlocker {
-            anchors.fill: parent
-        }
-        Column {
-            id: busyIndicator
-            anchors.centerIn: parent
-            spacing: Theme.paddingLarge
-            InfoLabel {
-                //% "Copying"
-                text: qsTrId("filemanager-la-copying")
-                anchors.horizontalCenter: parent.horizontalCenter
-            }
-            BusyIndicator {
-                anchors.horizontalCenter: parent.horizontalCenter
-                size: BusyIndicatorSize.Large
-                running: FileEngine.busy
+                sourceComponent: Rectangle {
+                    id: busyView
+
+                    enabled: FileEngine.busy
+                    opacity: enabled ? 1.0 : 0.0
+                    Behavior on opacity { FadeAnimator { duration: 400 } }
+                    color: Theme.rgba("black",  0.9)
+                    anchors.fill: parent
+
+                    TouchBlocker {
+                        anchors.fill: parent
+                    }
+                    Column {
+                        id: busyIndicator
+                        anchors.centerIn: parent
+                        spacing: Theme.paddingLarge
+                        InfoLabel {
+                            text: {
+                                switch (FileEngine.mode) {
+ /*
+                                // JB#34729: Uncomment after branching 2.0.2
+                                case FileEngine.DeleteMode:
+                                    //% "Deleting"
+                                  return qsTrId("filemanager-la-deleting")
+ */
+                                case FileEngine.CopyMode:
+                                    //% "Copying"
+                                    return qsTrId("filemanager-la-copying")
+                                default:
+                                    return ""
+                                }
+                            }
+                            anchors.horizontalCenter: parent.horizontalCenter
+                        }
+                        BusyIndicator {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            size: BusyIndicatorSize.Large
+                            running: busyView.enabled
+                        }
+                    }
+                }
             }
         }
     }
