@@ -15,13 +15,9 @@ BuildRequires:  qt5-qttools-linguist
 
 Requires: sailfishsilica-qt5
 Requires: jolla-theme >= 0.7.52
-Requires: nemo-qml-plugin-filemanager
+Requires: nemo-qml-plugin-filemanager >= 0.1.0
 Requires: nemo-qml-plugin-notifications-qt5
 Requires: nemo-qml-plugin-contentaction >= 0.2.6
-
-# BuildRequires: %{name}-all-translations
-# %define _all_translations_version %(rpm -q --queryformat "%%{version}-%%{release}" %{name}-all-translations)
-# Requires: %{name}-all-translations >= %{_all_translations_version}
 
 %description
 %{summary}.
