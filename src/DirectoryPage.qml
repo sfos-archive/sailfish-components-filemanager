@@ -64,6 +64,36 @@ Page {
             }
 
             MenuItem {
+                //% "Sort"
+                text: qsTrId("filemanager-me-sort")
+                visible: fileModel.count > 0
+                onClicked: {
+                    var dialog = pageStack.push(Qt.resolvedUrl("SortingPage.qml"))
+                    dialog.selected.connect(
+                        function(sortBy, sortOrder, directorySort) {
+                            if (sortBy !== fileModel.sortBy || sortOrder !== fileModel.sortOrder) {
+                                fileModel.sortBy = sortBy
+                                fileModel.sortOrder = sortOrder
+                                fileModel.directorySort = directorySort
+
+                                // Wait for the changes to take effect
+                                // before popping the sorting page
+                                fileModel.sortByChanged.connect(pop)
+                                fileModel.sortOrderChanged.connect(pop)
+                            } else {
+                                PageStack.pop()
+                            }
+                        }
+                    )
+                }
+                function pop() {
+                    pageStack.pop()
+                    fileModel.sortByChanged.disconnect(pop)
+                    fileModel.sortOrderChanged.disconnect(pop)
+                }
+            }
+
+            MenuItem {
                 //% "Paste"
                 text: qsTrId("filemanager-me-paste")
                 visible: FileEngine.clipboardCount > 0
@@ -190,7 +220,7 @@ Page {
             }
             menu: contextMenu
 
-            ListView.onRemove: animateRemoval(fileItem)
+            ListView.onRemove: if (page.status === PageStatus.Active) animateRemoval(fileItem)
             onClicked: {
                 if (model.isDir) {
                     pageStack.push(Qt.resolvedUrl("DirectoryPage.qml"),
@@ -310,12 +340,9 @@ Page {
                         InfoLabel {
                             text: {
                                 switch (FileEngine.mode) {
- /*
-                                // JB#34729: Uncomment after branching 2.0.2
                                 case FileEngine.DeleteMode:
                                     //% "Deleting"
                                   return qsTrId("filemanager-la-deleting")
- */
                                 case FileEngine.CopyMode:
                                     //% "Copying"
                                     return qsTrId("filemanager-la-copying")
