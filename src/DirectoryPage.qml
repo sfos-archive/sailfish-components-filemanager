@@ -275,10 +275,18 @@ Page {
     Component {
         id: errorNotificationComponent
         Notification {
+            property bool alreadyPublished
             category: "x-jolla.storage.error"
             function show(errorText) {
                 previewSummary = errorText
+                if (alreadyPublished) {
+                    // Make sure new banner is shown, call close() to avoid server treating
+                    // subsequent publish() calls as updates to the existing notification
+                    close()
+                }
+
                 publish()
+                alreadyPublished = true
             }
             property var connections: Connections {
                 target: FileEngine
