@@ -13,7 +13,7 @@ BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  qt5-qttools
 BuildRequires:  qt5-qttools-linguist
 
-Requires: sailfishsilica-qt5
+Requires: sailfishsilica-qt5 >= 0.22.39
 Requires: jolla-theme >= 0.7.52
 Requires: nemo-qml-plugin-filemanager >= 0.1.2
 Requires: nemo-qml-plugin-notifications-qt5
