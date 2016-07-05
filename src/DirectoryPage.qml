@@ -13,8 +13,13 @@ Page {
     property string title
     property bool showFormat
     property Notification errorNotification
+    property bool mounting
 
     signal formatClicked
+
+    function refresh() {
+        fileModel.refresh()
+    }
 
     backNavigation: !FileEngine.busy
 
@@ -40,7 +45,15 @@ Page {
     SilicaListView {
         id: fileList
 
-        opacity: FileEngine.busy ? 0.6 : 1.0
+        opacity: {
+            if (FileEngine.busy) {
+                return 0.6
+            } else if (page.mounting) {
+                return 0.0
+            } else {
+                return 1.0
+            }
+        }
         Behavior on opacity { FadeAnimator {} }
 
         anchors.fill: parent
@@ -288,28 +301,49 @@ Page {
         }
     }
 
-    Rectangle {
+    Item {
+        id: busyOverlay
+
         anchors.fill: parent
-        enabled: FileEngine.busy
-        opacity: FileEngine.busy ? 1.0 : 0.0
-        color: Theme.rgba("black",  0.9)
+        enabled: FileEngine.busy || page.mounting
+        opacity: enabled ? 1.0 : 0.0
+
         Behavior on opacity { FadeAnimator { duration: 400 } }
-        TouchBlocker {
-            anchors.fill: parent
+
+        onEnabledChanged: {
+            if (enabled) {
+                busyRectangle.visible = FileEngine.busy
+            }
         }
+
+        Rectangle {
+            id: busyRectangle
+
+            color: Theme.rgba("black",  0.9)
+
+            anchors.fill: parent
+
+            TouchBlocker {
+                anchors.fill: parent
+            }
+        }
+
         Column {
             id: busyIndicator
             anchors.centerIn: parent
             spacing: Theme.paddingLarge
             InfoLabel {
-                //% "Copying"
-                text: qsTrId("filemanager-la-copying")
+                text: busyRectangle.visible
+                        //% "Copying"
+                        ? qsTrId("filemanager-la-copying")
+                          //% "Mounting SD card"
+                        : qsTrId("filemanager-la-mounting")
                 anchors.horizontalCenter: parent.horizontalCenter
             }
             BusyIndicator {
                 anchors.horizontalCenter: parent.horizontalCenter
                 size: BusyIndicatorSize.Large
-                running: FileEngine.busy
+                running: busyOverlay.enabled
             }
         }
     }
