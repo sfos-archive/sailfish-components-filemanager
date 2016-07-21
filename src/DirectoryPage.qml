@@ -14,8 +14,13 @@ Page {
     property string title
     property bool showFormat
     property Notification errorNotification
+    property bool mounting
 
     signal formatClicked
+
+    function refresh() {
+        fileModel.refresh()
+    }
 
     backNavigation: !FileEngine.busy
 
@@ -41,7 +46,15 @@ Page {
     SilicaListView {
         id: fileList
 
-        opacity: FileEngine.busy ? 0.6 : 1.0
+        opacity: {
+            if (FileEngine.busy) {
+                return 0.6
+            } else if (page.mounting) {
+                return 0.0
+            } else {
+                return 1.0
+            }
+        }
         Behavior on opacity { FadeAnimator {} }
 
         anchors.fill: parent
@@ -326,29 +339,45 @@ Page {
             }
             property var busyView: Loader {
                 parent: __silica_applicationwindow_instance
-                active: FileEngine.busy
+                active: FileEngine.busy || page.mounting
                 onActiveChanged: active = true // remove binding
                 anchors.fill: parent
 
-                sourceComponent: Rectangle {
+                sourceComponent: Item {
                     id: busyView
 
-                    enabled: FileEngine.busy
+                    enabled: FileEngine.busy || page.mounting
                     opacity: enabled ? 1.0 : 0.0
-                    Behavior on opacity { FadeAnimator { duration: 400 } }
-                    color: Theme.rgba("black",  0.9)
-                    anchors.fill: parent
+                    Behavior on opacity { FadeAnimator { duration: 400 } }                    anchors.fill: parent
 
-                    TouchBlocker {
-                        anchors.fill: parent
+                    onEnabledChanged: {
+                        if (enabled) {
+                            busyRectangle.visible = FileEngine.busy
+                        }
                     }
+
+                    Rectangle {
+                        id: busyRectangle
+
+                        color: Theme.rgba("black",  0.9)
+
+                        anchors.fill: parent
+
+                        TouchBlocker {
+                            anchors.fill: parent
+                        }
+                    }
+
                     Column {
                         id: busyIndicator
                         anchors.centerIn: parent
                         spacing: Theme.paddingLarge
                         InfoLabel {
                             text: {
-                                switch (FileEngine.mode) {
+                                if (page.mounting) {
+                                    //% "Mounting SD card"
+                                    return qsTrId("filemanager-la-mounting")
+                                } else switch (FileEngine.mode) {
                                 case FileEngine.DeleteMode:
                                     //% "Deleting"
                                   return qsTrId("filemanager-la-deleting")
