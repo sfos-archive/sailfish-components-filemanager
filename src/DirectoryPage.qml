@@ -98,7 +98,7 @@ Page {
                 //% "Paste"
                 text: qsTrId("filemanager-me-paste")
                 visible: FileEngine.clipboardCount > 0
-                onClicked: FileEngine.pasteFiles(page.path)
+                onClicked: FileEngine.pasteFiles(page.path, true)
             }
         }
 
@@ -112,7 +112,7 @@ Page {
 
             function remove() {
                 //% "Deleting"
-                remorseAction(qsTrId("filemanager-la-deleting"), function() { FileEngine.deleteFiles(fileModel.fileNameAt(model.index)) })
+                remorseAction(qsTrId("filemanager-la-deleting"), function() { FileEngine.deleteFiles(fileModel.fileNameAt(model.index), true) })
             }
 
             width: ListView.view.width
@@ -309,6 +309,10 @@ Page {
                         //% "Moving failed"
                         show(qsTrId("filemanager-la-moving_failed"))
                         break
+                    case FileEngine.ErrorRenameFailed:
+                        //% "Renaming failed"
+                        show(qsTrId("filemanager-la-renaming_failed"))
+                        break
                     case FileEngine.ErrorCannotCopyIntoItself:
                         //% "You cannot copy a folder into itself"
                         show(qsTrId("filemanager-la-cannot_copy_folder_into_itself"))
@@ -320,6 +324,10 @@ Page {
                     case FileEngine.ErrorFolderCreationFailed:
                         //% "Could not create folder"
                         show(qsTrId("filemanager-la-folder_creation_failed"))
+                        break
+                    case FileEngine.ErrorChmodFailed:
+                        //% "Could not set permission"
+                        show(qsTrId("filemanager-la-set_permissions_failed"))
                         break
                     }
                 }
