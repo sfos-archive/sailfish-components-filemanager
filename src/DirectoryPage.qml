@@ -16,6 +16,11 @@ Page {
     property Notification errorNotification
     property bool mounting
 
+    property alias sortBy: fileModel.sortBy
+    property alias sortOrder: fileModel.sortOrder
+    property alias caseSensitivity: fileModel.caseSensitivity
+    property alias directorySort: fileModel.directorySort
+
     signal formatClicked
 
     function refresh() {
@@ -32,6 +37,8 @@ Page {
 
     FileModel {
         id: fileModel
+
+        directorySort: FileModel.SortDirectoriesBeforeFiles
 
         path: homePath
         active: page.status === PageStatus.Active
@@ -237,8 +244,15 @@ Page {
             ListView.onRemove: if (page.status === PageStatus.Active) animateRemoval(fileItem)
             onClicked: {
                 if (model.isDir) {
-                    pageStack.push(Qt.resolvedUrl("DirectoryPage.qml"),
-                                   { path: fileModel.appendPath(model.fileName), homePath: page.homePath, errorNotification: page.errorNotification })
+                    pageStack.push(Qt.resolvedUrl("DirectoryPage.qml"), {
+                        path: fileModel.appendPath(model.fileName),
+                        homePath: page.homePath,
+                        errorNotification: page.errorNotification,
+                        sortBy: page.sortBy,
+                        sortOrder: page.sortOrder,
+                        caseSensitivity: page.caseSensitivity,
+                        directorySort: page.directorySort
+                    })
                 } else {
                     var filePath = Qt.resolvedUrl(fileModel.path + "/" + model.fileName)
                     var ok = ContentAction.trigger(filePath)

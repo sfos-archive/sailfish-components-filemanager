@@ -30,13 +30,13 @@ Page {
             ListElement {
                 sortOrder: Qt.AscendingOrder
                 sortBy: FileModel.SortByName
-                directorySort: FileModel.SortDirectoriesWithFiles
+                directorySort: FileModel.SortDirectoriesBeforeFiles
                 label: "filemanager-la-name_ascending"
             }
             ListElement {
                 sortOrder: Qt.DescendingOrder
                 sortBy: FileModel.SortByName
-                directorySort: FileModel.SortDirectoriesWithFiles
+                directorySort: FileModel.SortDirectoriesAfterFiles
                 label: "filemanager-la-name_descending"
             }
             ListElement {
@@ -48,13 +48,13 @@ Page {
             ListElement {
                 sortOrder: Qt.AscendingOrder
                 sortBy: FileModel.SortByModified
-                directorySort: FileModel.SortDirectoriesWithFiles
+                directorySort: FileModel.SortDirectoriesBeforeFiles
                 label: "filemanager-la-date_modified"
             }
             ListElement {
                 sortOrder: Qt.AscendingOrder
                 sortBy: FileModel.SortByExtension
-                directorySort: FileModel.SortDirectoriesAfterFiles
+                directorySort: FileModel.SortDirectoriesBeforeFiles
                 label: "filemanager-la-extension"
             }
         }
