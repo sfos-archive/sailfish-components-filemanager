@@ -280,6 +280,10 @@ Page {
             Component {
                 id: contextMenu
                 ContextMenu {
+
+                    //% "Share"
+                    property string share: qsTrId("filemanager-me-share")
+
                     MenuItem {
                         //% "Copy"
                         text: qsTrId("filemanager-me-copy")
