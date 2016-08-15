@@ -151,66 +151,8 @@ Page {
                     Image {
                         anchors.centerIn: parent
                         source: {
-                            var iconSource
-                            if (model.isDir) {
-                                iconSource = "image://theme/icon-m-file-folder"
-                            } else {
-                                var iconType = "other"
-                                switch (model.mimeType) {
-                                case "application/vnd.android.package-archive":
-                                    iconType = "apk"
-                                    break
-                                case "application/x-rpm":
-                                    iconType = "rpm"
-                                    break
-                                case "text/vcard":
-                                    iconType = "vcard"
-                                    break
-                                case "text/plain":
-                                case "text/x-vnote":
-                                    iconType = "note"
-                                    break
-                                case "application/pdf":
-                                    iconType = "pdf"
-                                    break
-                                case "application/vnd.oasis.opendocument.spreadsheet":
-                                case "application/x-kspread":
-                                case "application/vnd.ms-excel":
-                                case "text/csv":
-                                case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
-                                case "application/vnd.openxmlformats-officedocument.spreadsheetml.template":
-                                    iconType = "spreadsheet"
-                                    break
-                                case "application/vnd.oasis.opendocument.presentation":
-                                case "application/vnd.oasis.opendocument.presentation-template":
-                                case "application/x-kpresenter":
-                                case "application/vnd.ms-powerpoint":
-                                case "application/vnd.openxmlformats-officedocument.presentationml.presentation":
-                                case "application/vnd.openxmlformats-officedocument.presentationml.template":
-                                    iconType = "presentation"
-                                    break
-                                case "application/vnd.oasis.opendocument.text-master":
-                                case "application/vnd.oasis.opendocument.text":
-                                case "application/vnd.oasis.opendocument.text-template":
-                                case "application/msword":
-                                case "application/rtf":
-                                case "application/x-mswrite":
-                                case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-                                case "application/vnd.openxmlformats-officedocument.wordprocessingml.template":
-                                case "application/vnd.ms-works":
-                                    iconType = "formatted"
-                                    break
-                                default:
-                                    if (mimeType.indexOf("audio/") == 0) {
-                                        iconType = "audio"
-                                    } else if (mimeType.indexOf("image/") == 0) {
-                                        iconType = "image"
-                                    } else if (mimeType.indexOf("video/") == 0) {
-                                        iconType = "video"
-                                    }
-                                }
-                                iconSource = "image://theme/icon-m-file-" + iconType
-                            }
+                            var iconSource = model.isDir ? "image://theme/icon-m-file-folder"
+                                                         : Theme.iconForMimeType(model.mimeType)
                             return iconSource + (highlighted ? "?" + Theme.highlightColor : "")
                         }
                     }
