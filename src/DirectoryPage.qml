@@ -222,15 +222,24 @@ Page {
             Component {
                 id: contextMenu
                 ContextMenu {
-
-                    //% "Share"
-                    property string share: qsTrId("filemanager-me-share")
-
                     MenuItem {
                         //% "Copy"
                         text: qsTrId("filemanager-me-copy")
                         onClicked: FileEngine.copyFiles([ fileModel.fileNameAt(model.index) ])
                     }
+
+                    MenuItem {
+                        visible: !model.isDir && !model.isLink
+                        //% "Share"
+                        text: qsTrId("filemanager-me-share")
+                        onClicked: {
+                            pageStack.push(Qt.resolvedUrl("SharePage.qml"), {
+                                               url: Qt.resolvedUrl(model.absolutePath),
+                                               mimeType: model.mimeType
+                                           })
+                        }
+                    }
+
                     MenuItem {
                         //% "Delete"
                         text: qsTrId("filemanager-me-delete")
