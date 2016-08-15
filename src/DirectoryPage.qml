@@ -160,11 +160,9 @@ Page {
                 Column {
                     width: parent.width - parent.height - parent.spacing - Theme.horizontalPageMargin
                     anchors.verticalCenter: parent.verticalCenter
-                    spacing: -Theme.paddingSmall
                     Label {
                         text: model.fileName
                         width: parent.width
-                        font.pixelSize: Theme.fontSizeLarge
                         truncationMode: TruncationMode.Fade
                         color: highlighted ? Theme.highlightColor : Theme.primaryColor
                     }
@@ -176,7 +174,7 @@ Page {
                                           : qsTrId("filemanager-la-file_details").arg(Format.formatFileSize(model.size)).arg(dateString)
                         width: parent.width
                         truncationMode: TruncationMode.Fade
-                        font.pixelSize: Theme.fontSizeSmall
+                        font.pixelSize: Theme.fontSizeExtraSmall
                         color: highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
                     }
                 }
