@@ -104,7 +104,7 @@ Page {
                                 fileModel.sortByChanged.connect(pop)
                                 fileModel.sortOrderChanged.connect(pop)
                             } else {
-                                PageStack.pop()
+                                pageStack.pop()
                             }
                         }
                     )
