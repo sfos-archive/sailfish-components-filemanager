@@ -18,9 +18,6 @@ target.path = $$TARGETPATH
 
 OTHER_FILES += $${QML_FILES}
 
-notification.path = /usr/share/lipstick/notificationcategories
-notification.files = x-jolla.storage.error.conf
-
 TS_FILE = $$OUT_PWD/sailfish_components_filemanager.ts
 EE_QM = $$OUT_PWD/sailfish_components_filemanager_eng_en.qm
 
