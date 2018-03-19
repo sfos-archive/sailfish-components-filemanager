@@ -3,6 +3,8 @@ import Sailfish.Silica 1.0
 import Sailfish.TransferEngine 1.0
 
 Page {
+    id: page
+
     property alias url: shareMethodList.source
     property alias mimeType: shareMethodList.filter
 
@@ -14,5 +16,8 @@ Page {
             //% "Share"
             title: qsTrId("filemanager-he-share")
         }
+
+        serviceFilter: ["sharing", "e-mail"]
+        containerPage: page
     }
 }
