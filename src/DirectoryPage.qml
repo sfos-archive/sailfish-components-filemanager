@@ -196,9 +196,10 @@ Page {
                         //% "Share"
                         text: qsTrId("filemanager-me-share")
                         onClicked: {
-                            pageStack.push(Qt.resolvedUrl("SharePage.qml"), {
-                                               url: Qt.resolvedUrl(model.absolutePath),
-                                               mimeType: model.mimeType
+                            pageStack.push("Sailfish.TransferEngine.SharePage", {
+                                               source: Qt.resolvedUrl(model.absolutePath),
+                                               mimeType: model.mimeType,
+                                               serviceFilter: ["sharing", "e-mail"]
                                            })
                         }
                     }
