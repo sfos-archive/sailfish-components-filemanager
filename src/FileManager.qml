@@ -36,6 +36,10 @@ Item {
         var ok = ContentAction.trigger(url)
         if (!ok) {
             switch (ContentAction.error) {
+            case ContentAction.FileIsEmpty:
+                //% "Cannot open empty file"
+                errorNotification.show(qsTrId("filemanager-la-file_is_empty"))
+                break;
             case ContentAction.FileTypeNotSupported:
                 //: Notification text shown when user tries to open a file of a type that is not supported
                 //% "Cannot open file, file type not supported"
