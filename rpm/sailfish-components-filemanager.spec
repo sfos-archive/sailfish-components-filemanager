@@ -1,6 +1,6 @@
 Name:       sailfish-components-filemanager
 Summary:    Sailfish File Manager UI components
-Version:    0.1.17
+Version:    0.1.19
 Release:    1
 Group:      System/Libraries
 License:    Proprietary
@@ -17,7 +17,7 @@ Requires: sailfishsilica-qt5 >= 0.26.8
 Requires: jolla-theme >= 0.7.52
 Requires: nemo-qml-plugin-filemanager >= 0.1.6
 Requires: nemo-qml-plugin-notifications-qt5
-Requires: nemo-qml-plugin-contentaction >= 0.2.6
+Requires: nemo-qml-plugin-contentaction >= 0.3.2
 
 %description
 %{summary}.
