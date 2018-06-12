@@ -42,8 +42,9 @@ Item {
                 break;
             case ContentAction.FileTypeNotSupported:
                 //: Notification text shown when user tries to open a file of a type that is not supported
-                //% "Cannot open file, file type not supported"
-                errorNotification.show(qsTrId("filemanager-la-file_type_not_supported"))
+                //: %1 represents mime type, e.g. image/djvu, video/3gp, etc.
+                //% "File type '%1' is not supported"
+                errorNotification.show(qsTrId("filemanager-la-unsupported_mime_type").arg(ContentAction.mimeType))
                 break
             case ContentAction.FileDoesNotExist:
                 //: Notification text shown when user tries to open a file but the file is not found locally.
