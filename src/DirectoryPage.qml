@@ -213,7 +213,7 @@ Page {
             }
         }
         ViewPlaceholder {
-            enabled: fileModel.count === 0
+            enabled: fileModel.count === 0 && fileModel.populated
             //% "No files"
             text: qsTrId("filemanager-la-no_files")
         }
