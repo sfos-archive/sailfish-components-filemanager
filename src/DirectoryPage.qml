@@ -94,7 +94,7 @@ Page {
                 text: qsTrId("filemanager-me-new_folder")
                 visible: page.showNewFolder
                 onClicked: {
-                    var dialog = pageStack.push(Qt.resolvedUrl("NewFolderDialog.qml"), { path: page.path })
+                    pageStack.animatorPush(Qt.resolvedUrl("NewFolderDialog.qml"), { path: page.path })
                 }
             }
 
@@ -116,23 +116,24 @@ Page {
                 text: qsTrId("filemanager-me-sort")
                 visible: fileModel.count > 0
                 onClicked: {
-                    var dialog = pageStack.push(Qt.resolvedUrl("SortingPage.qml"))
-                    dialog.selected.connect(
-                        function(sortBy, sortOrder, directorySort) {
-                            if (sortBy !== fileModel.sortBy || sortOrder !== fileModel.sortOrder) {
-                                fileModel.sortBy = sortBy
-                                fileModel.sortOrder = sortOrder
-                                fileModel.directorySort = directorySort
+                    var obj = pageStack.animatorPush(Qt.resolvedUrl("SortingPage.qml"))
+                    obj.pageCompleted.connect(function(dialog) {
+                        dialog.selected.connect(
+                                    function(sortBy, sortOrder, directorySort) {
+                                        if (sortBy !== fileModel.sortBy || sortOrder !== fileModel.sortOrder) {
+                                            fileModel.sortBy = sortBy
+                                            fileModel.sortOrder = sortOrder
+                                            fileModel.directorySort = directorySort
 
-                                // Wait for the changes to take effect
-                                // before popping the sorting page
-                                fileModel.sortByChanged.connect(pop)
-                                fileModel.sortOrderChanged.connect(pop)
-                            } else {
-                                pageStack.pop()
-                            }
-                        }
-                    )
+                                            // Wait for the changes to take effect
+                                            // before popping the sorting page
+                                            fileModel.sortByChanged.connect(pop)
+                                            fileModel.sortOrderChanged.connect(pop)
+                                        } else {
+                                            pageStack.pop()
+                                        }
+                                    })
+                    })
                 }
                 function pop() {
                     pageStack.pop()
@@ -196,7 +197,7 @@ Page {
                         //% "Share"
                         text: qsTrId("filemanager-me-share")
                         onClicked: {
-                            pageStack.push("Sailfish.TransferEngine.SharePage", {
+                            pageStack.animatorPush("Sailfish.TransferEngine.SharePage", {
                                                source: Qt.resolvedUrl(model.absolutePath),
                                                mimeType: model.mimeType,
                                                serviceFilter: ["sharing", "e-mail"]
