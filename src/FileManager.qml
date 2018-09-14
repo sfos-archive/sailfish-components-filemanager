@@ -28,7 +28,7 @@ Item {
             properties["errorNotification"] = root.errorNotification
         }
 
-        return pageStack.push(Qt.resolvedUrl("DirectoryPage.qml"), properties)
+        return pageStack.animatorPush(Qt.resolvedUrl("DirectoryPage.qml"), properties)
     }
 
     function openUrlExternally(url) {
@@ -73,7 +73,7 @@ Item {
             properties["baseExtractionDirectory"] = baseExtractionDirectory
         }
 
-        return pageStack.push(Qt.resolvedUrl("ArchivePage.qml"), properties, stackAction)
+        return pageStack.animatorPush(Qt.resolvedUrl("ArchivePage.qml"), properties, stackAction)
     }
 
     function createErrorNotification() {

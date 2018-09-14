@@ -65,8 +65,10 @@ Page {
                         FileManager.openUrlExternally(Qt.resolvedUrl(model.extractedTargetPath))
                     }
                 } else if (model.isDir) {
-                    var subPage = FileManager.openArchive(archiveFile, extractor.appendPath(model.fileName), baseExtractionDirectory)
-                    subPage.archiveExtracted.connect(page.archiveExtracted)
+                    var obj = FileManager.openArchive(archiveFile, extractor.appendPath(model.fileName), baseExtractionDirectory)
+                    obj.pageCompleted.connect(function(archivePage) {
+                        archivePage.archiveExtracted.connect(page.archiveExtracted)
+                    })
                 } else {
                     openMenu()
                 }
