@@ -187,6 +187,20 @@ Page {
                 id: contextMenu
                 ContextMenu {
                     MenuItem {
+                        //% "Details"
+                        text: qsTrId("filemanager-me-details")
+                        onClicked: {
+                            pageStack.animatorPush("DetailsPage.qml", {
+                                               fileName: model.fileName,
+                                               mimeType: model.mimeType,
+                                               isDir: model.isDir,
+                                               modified: model.modified,
+                                               size: model.size
+                                           })
+                        }
+                    }
+
+                    MenuItem {
                         //% "Copy"
                         text: qsTrId("filemanager-me-copy")
                         onClicked: FileEngine.copyFiles([ fileModel.fileNameAt(model.index) ])
