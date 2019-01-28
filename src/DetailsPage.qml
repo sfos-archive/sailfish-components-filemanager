@@ -29,8 +29,8 @@ Page {
 
             DetailItem {
                 id: fileNameItem
-                //% "Filename"
-                label: qsTrId("filemanager-he-filename")
+                //% "Name"
+                label: qsTrId("filemanager-he-name")
             }
 
             DetailItem {
