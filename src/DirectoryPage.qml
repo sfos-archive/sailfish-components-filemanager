@@ -30,6 +30,7 @@ Page {
     property alias sortOrder: fileModel.sortOrder
     property alias caseSensitivity: fileModel.caseSensitivity
     property alias directorySort: fileModel.directorySort
+    property alias errorType: fileModel.errorType
 
     property int __directory_page
     property string _deletingPath
@@ -75,13 +76,6 @@ Page {
 
         path: initialPath
         active: page.status === PageStatus.Active
-        onError: {
-            if (error == FileModel.ErrorReadNoPermissions) {
-                //% "No permissions to access %1"
-                errorNotification.show(qsTrId("filemanager-la-folder_no_permission_to_access").arg(fileName))
-
-            }
-        }
     }
     SilicaListView {
         id: listView
@@ -289,9 +283,14 @@ Page {
             }
         }
         ViewPlaceholder {
-            enabled: fileModel.count === 0 && fileModel.populated
-            //% "No files"
-            text: qsTrId("filemanager-la-no_files")
+            id: viewPlaceholder
+            enabled: (fileModel.count === 0 && fileModel.populated) || errorType !== FileModel.NoError
+            visible: enabled
+            text: errorType === FileModel.NoError ?
+                  //% "No files"
+                  qsTrId("filemanager-la-no_files") :
+                  //% "No permissions to access %1"
+                  qsTrId("filemanager-la-folder_no_permission_to_access").arg(fileModel.path)
         }
         VerticalScrollDecorator {}
     }
