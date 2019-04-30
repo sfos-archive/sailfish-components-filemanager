@@ -179,7 +179,7 @@ Page {
                                               })
                 } else {
                     var filePath = Qt.resolvedUrl(fileModel.path + "/" + model.fileName)
-                    FileManager.openUrlExternally(filePath)
+                    Qt.openUrlExternally(filePath)
                 }
             }
 

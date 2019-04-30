@@ -62,7 +62,7 @@ Page {
                             extractor.model.cleanExtractedEntry(model.fileName)
                         })
                     } else {
-                        FileManager.openUrlExternally(Qt.resolvedUrl(model.extractedTargetPath))
+                        Qt.openUrlExternally(Qt.resolvedUrl(model.extractedTargetPath))
                     }
                 } else if (model.isDir) {
                     var obj = FileManager.openArchive(archiveFile, extractor.appendPath(model.fileName), baseExtractionDirectory)
