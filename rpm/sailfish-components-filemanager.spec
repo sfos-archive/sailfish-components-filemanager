@@ -45,7 +45,7 @@ rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
-%{_libdir}/qt5/qml/Sailfish/FileManager/*
+%{_libdir}/qt5/qml/Sailfish/FileManager
 %{_datadir}/translations/sailfish_components_filemanager_eng_en.qm
 
 %files ts-devel
