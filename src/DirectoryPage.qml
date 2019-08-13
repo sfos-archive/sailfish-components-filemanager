@@ -8,11 +8,14 @@ Page {
 
     property alias path: fileModel.path
     property alias header: listView.header
-    property string homePath
+    property string initialPath: homePath
+    property string homePath // deprecated
+    onHomePathChanged: if (homePath.length > 0) console.warn("DirectoryPage.homePath deprecated, use initialPath instead.")
+
     property string title
     property string description
     property bool showFormat
-    property bool showDeleteFolder
+    property alias showDeleteFolder: deleteFolder.visible
 
     property bool mounting
     property bool showNewFolder: true
@@ -21,6 +24,9 @@ Page {
     property alias sortOrder: fileModel.sortOrder
     property alias caseSensitivity: fileModel.caseSensitivity
     property alias directorySort: fileModel.directorySort
+
+    property int __directory_page
+    property string _deletingPath
 
     /*!
     \internal
@@ -35,6 +41,10 @@ Page {
 
     function refresh() {
         fileModel.refresh()
+    }
+
+    function _commitDeletion() {
+        FileEngine.deleteFiles(_deletingPath, true)
     }
 
     backNavigation: !FileEngine.busy
@@ -55,7 +65,7 @@ Page {
 
         directorySort: FileModel.SortDirectoriesBeforeFiles
 
-        path: homePath
+        path: initialPath
         active: page.status === PageStatus.Active
         onError: {
             if (error == FileModel.ErrorReadNoPermissions) {
@@ -81,7 +91,6 @@ Page {
         anchors.fill: parent
         model: fileModel
 
-        RemorsePopup { id: remorse }
 
         PullDownMenu {
             MenuItem {
@@ -92,6 +101,33 @@ Page {
             }
 
             MenuItem {
+                id: deleteFolder
+                //% "Delete folder"
+                text: qsTrId("filemanager-me-delete_folder")
+                visible: page.path !== page.initialPath
+                onClicked: {
+                    var _page = pageStack.previousPage(page)
+                    if (_page && _page.hasOwnProperty("__directory_page")) {
+                        pageStack.pop()
+                        _page._deletingPath = page.path
+                        var popup = Remorse.popupAction(_page,
+                                    Remorse.deletedText,
+                                    function() {
+                                        _page._commitDeletion()
+                                    })
+                        popup.canceled.connect(function() { _page._deletingPath = "" })
+                    } else {
+                        //% "Deleting folder"
+                        Remorse.popupAction(page, qsTrId("filemanager-la-deleting_folder"), function() {
+                            FileEngine.deleteFiles(path, true)
+                            folderDeleted(path)
+                            pageStack.pop()
+                        })
+                    }
+                }
+            }
+
+            MenuItem {
                 //% "New folder"
                 text: qsTrId("filemanager-me-new_folder")
                 visible: page.showNewFolder
@@ -99,19 +135,6 @@ Page {
                     pageStack.animatorPush(Qt.resolvedUrl("NewFolderDialog.qml"), { path: page.path })
                 }
             }
-
-            MenuItem {
-                //% "Delete folder"
-                text: qsTrId("filemanager-me-delete_folder")
-                visible: page.showDeleteFolder
-                //% "Deleting folder"
-                onClicked: remorse.execute(qsTrId("filemanager-la-deleting_folder"), function() {
-                    FileEngine.deleteFiles(path, true)
-                    folderDeleted(path)
-                    pageStack.pop()
-                })
-            }
-
 
             MenuItem {
                 //% "Sort"
@@ -153,8 +176,8 @@ Page {
         }
 
         header: PageHeader {
-            title: path == homePath && page.title.length > 0 ? page.title
-                                                             : page.path.split("/").pop()
+            title: path == initialPath && page.title.length > 0 ? page.title
+                                                                : page.path.split("/").pop()
             description: page.description
         }
 
@@ -162,18 +185,19 @@ Page {
             id: fileItem
 
             function remove() {
-                //% "Deleting"
-                remorseAction(qsTrId("filemanager-la-deleting"), function() { FileEngine.deleteFiles(fileModel.fileNameAt(model.index), true) })
+                remorseDelete(function() { FileEngine.deleteFiles(fileModel.fileNameAt(model.index), true) })
             }
 
             menu: contextMenu
+
+            hidden: _deletingPath === model.absolutePath
 
             ListView.onRemove: if (page.status === PageStatus.Active) animateRemoval(fileItem)
             onClicked: {
                 if (model.isDir) {
                     FileManager.openDirectory({
                                                   path: fileModel.appendPath(model.fileName),
-                                                  homePath: page.homePath,
+                                                  initialPath: page.initialPath,
                                                   sortBy: page.sortBy,
                                                   sortOrder: page.sortOrder,
                                                   caseSensitivity: page.caseSensitivity,
@@ -282,6 +306,12 @@ Page {
                         //% "Could not set permission"
                         show(qsTrId("filemanager-la-set_permissions_failed"))
                         break
+                    }
+                    _deletingPath = "" // reset state if deletion failed
+                }
+                onModeChanged: {
+                    if (FileEngine.mode === FileEngine.IdleMode) {
+                        _deletingPath = ""
                     }
                 }
             }
