@@ -8,7 +8,7 @@ Page {
     property alias mimeType: fileTypeItem.value
     property bool isDir
     property date modified
-    property int size
+    property double size
 
     SilicaFlickable {
         anchors.fill: parent
