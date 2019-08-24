@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2016 – 2019 Jolla Ltd.
+ * Copyright (c) 2019 Open Mobile Platform LLC.
+ *
+ * License: Proprietary
+ */
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import Nemo.FileManager 1.0
@@ -58,6 +64,8 @@ Page {
         if (!FileManager.errorNotification) {
             FileManager.errorNotification = errorNotification
         }
+
+        FileOperationMonitor.instance()
     }
 
     FileModel {
