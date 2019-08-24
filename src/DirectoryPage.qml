@@ -264,8 +264,9 @@ Page {
                         show(qsTrId("filemanager-la-renaming_failed"))
                         break
                     case FileEngine.ErrorCannotCopyIntoItself:
-                        //% "You cannot copy a folder into itself"
-                        show(qsTrId("filemanager-la-cannot_copy_folder_into_itself"))
+                        //: Shown both when trying to copy file over itself and copying a folder into itself
+                        //% "You cannot copy into itself"
+                        show(qsTrId("filemanager-la-cannot_copy_into_itself"))
                         break
                     case FileEngine.ErrorFolderCopyFailed:
                         //% "Copying folder failed"

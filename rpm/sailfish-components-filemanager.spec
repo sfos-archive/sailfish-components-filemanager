@@ -15,7 +15,7 @@ BuildRequires:  qt5-qttools-linguist
 
 Requires: sailfishsilica-qt5 >= 0.27.0
 Requires: sailfish-content-graphics
-Requires: nemo-qml-plugin-filemanager >= 0.1.6
+Requires: nemo-qml-plugin-filemanager >= 0.1.13
 Requires: nemo-qml-plugin-notifications-qt5
 Requires: nemo-qml-plugin-contentaction >= 0.3.2
 
