@@ -7,6 +7,7 @@ Page {
     id: page
 
     property alias path: fileModel.path
+    property alias header: listView.header
     property string homePath
     property string title
     property string description
@@ -65,6 +66,7 @@ Page {
         }
     }
     SilicaListView {
+        id: listView
         opacity: {
             if (FileEngine.busy) {
                 return 0.6
