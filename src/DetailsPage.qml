@@ -1,6 +1,13 @@
+/*
+ * Copyright (c) 2016 – 2019 Jolla Ltd.
+ * Copyright (c) 2019 Open Mobile Platform LLC.
+ *
+ * License: Proprietary
+ */
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import Sailfish.FileManager 1.0
+import Nemo.FileManager 1.0
 
 Page {
 
@@ -9,6 +16,7 @@ Page {
     property bool isDir
     property date modified
     property double size
+    property string path
 
     SilicaFlickable {
         anchors.fill: parent
@@ -36,7 +44,9 @@ Page {
             DetailItem {
                 //% "Size"
                 label: qsTrId("filemanager-he-size")
-                value: Format.formatFileSize(size)
+                //: Shown when calculating size of a directory (context menu -> details)
+                //% "Calculating…"
+                value: du.working ? qsTrId("filemanager-la-calculating") : Format.formatFileSize(size)
             }
 
             DetailItem {
@@ -53,5 +63,15 @@ Page {
         }
 
         VerticalScrollDecorator {}
+    }
+
+    DiskUsage { id: du }
+
+    Component.onCompleted: {
+        if (isDir) {
+            du.calculate(path, function (usage) {
+                size = usage[path]
+            })
+        }
     }
 }
