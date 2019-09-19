@@ -197,7 +197,8 @@ Page {
                                                mimeType: model.mimeType,
                                                isDir: model.isDir,
                                                modified: model.modified,
-                                               size: model.size
+                                               size: model.size,
+                                               path: model.absolutePath
                                            })
                         }
                     }
