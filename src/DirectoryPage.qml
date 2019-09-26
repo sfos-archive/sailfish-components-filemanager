@@ -184,9 +184,21 @@ Page {
         }
 
         header: PageHeader {
+            id: pageHeader
             title: path == initialPath && page.title.length > 0 ? page.title
                                                                 : page.path.split("/").pop()
             description: page.description
+
+            BusyIndicator {
+                parent: pageHeader.extraContent
+                anchors {
+                    verticalCenter: parent.verticalCenter
+                    right: parent.right
+                    rightMargin: Theme.paddingLarge
+                }
+                size: BusyIndicatorSize.ExtraSmall
+                running: FileEngine.mode === FileEngine.CopyMode || FileEngine.mode === FileEngine.MoveMode
+            }
         }
 
         delegate: FileItem {
