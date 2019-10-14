@@ -54,6 +54,15 @@ Item {
         }
     }
 
+    function pathToUrl(path) {
+        if (path.indexOf("file://") == 0) {
+            console.warn("pathToUrl() argument already url:", path)
+            return path
+        }
+
+        return "file://" + path.split("/").map(encodeURIComponent).join("/")
+    }
+
     Component {
         id: errorNotificationComponent
 

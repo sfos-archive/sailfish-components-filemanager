@@ -224,8 +224,7 @@ Page {
                                                   directorySort: page.directorySort
                                               })
                 } else {
-                    var filePath = Qt.resolvedUrl(fileModel.path + "/" + model.fileName)
-                    Qt.openUrlExternally(filePath)
+                    Qt.openUrlExternally(FileManager.pathToUrl(fileModel.path + "/" + fileName))
                 }
             }
 
