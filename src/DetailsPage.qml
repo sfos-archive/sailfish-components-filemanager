@@ -17,6 +17,7 @@ Page {
     property date modified
     property double size
     property string path
+    property int itemCount
 
     SilicaFlickable {
         anchors.fill: parent
@@ -44,9 +45,19 @@ Page {
             DetailItem {
                 //% "Size"
                 label: qsTrId("filemanager-he-size")
-                //: Shown when calculating size of a directory (context menu -> details)
-                //% "Calculating…"
-                value: du.working ? qsTrId("filemanager-la-calculating") : Format.formatFileSize(size)
+                value: Format.formatFileSize(size)
+                visible: !isDir
+            }
+
+            DetailItem {
+                //% "Contents"
+                label: qsTrId("filemanager-he-contents")
+                //: Shown when counting number of items a directory (context menu -> details)
+                //% "Counting…"
+                value: (du.status !== DiskUsage.Idle) ? qsTrId("filemanager-la-counting")
+                                                        //% "%n items, totalling %1."
+                                                      : qsTrId("filemanager-la-items", itemCount).arg(Format.formatFileSize(size))
+                visible: isDir
             }
 
             DetailItem {
@@ -72,6 +83,10 @@ Page {
             du.calculate(path, function (usage) {
                 size = usage[path]
             })
+
+            du.fileCount(path, function(count) {
+                itemCount = count
+            }, DiskUsage.Files | DiskUsage.Dirs)
         }
     }
 }
