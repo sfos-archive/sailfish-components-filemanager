@@ -201,18 +201,20 @@ Page {
             }
         }
 
-        delegate: FileItem {
-            id: fileItem
+        delegate: ListItem {
+            id: fileDelegate
 
             function remove() {
                 remorseDelete(function() { FileEngine.deleteFiles(fileModel.fileNameAt(model.index), true) })
             }
 
+            width: ListView.view.width
+            contentHeight: fileItem.height
             menu: contextMenu
 
             hidden: _deletingPath === model.absolutePath
 
-            ListView.onRemove: if (page.status === PageStatus.Active) animateRemoval(fileItem)
+            ListView.onRemove: if (page.status === PageStatus.Active) animateRemoval(fileDelegate)
             onClicked: {
                 if (model.isDir) {
                     FileManager.openDirectory({
@@ -226,6 +228,10 @@ Page {
                 } else {
                     Qt.openUrlExternally(FileManager.pathToUrl(fileModel.path + "/" + fileName))
                 }
+            }
+
+            FileItem {
+                id: fileItem
             }
 
             Component {
