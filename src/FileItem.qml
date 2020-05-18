@@ -10,15 +10,16 @@ import Sailfish.Silica 1.0
 Row {
     id: root
 
-    property string fileName: model.fileName
-    property string mimeType: model.mimeType
-    property double size: model.size
-    property bool isDir: model.isDir
-    property var created: model.created
-    property var modified: model.modified
+    property string fileName
+    property string mimeType
+    property double size
+    property bool isDir
+    property var created
+    property var modified
     property bool compressed
 
     readonly property alias icon: icon
+    property alias textFormat: nameLabel.textFormat
 
     width: parent.width
     height: Theme.itemSizeMedium
@@ -59,11 +60,14 @@ Row {
     Column {
         width: parent.width - parent.height - parent.spacing - Theme.horizontalPageMargin
         anchors.verticalCenter: parent.verticalCenter
+
         Label {
+            id: nameLabel
             text: root.fileName
             width: parent.width
             truncationMode: TruncationMode.Fade
         }
+
         Label {
             property string dateString: Format.formatDate(root.modified || root.created, Formatter.DateLong)
             text: root.isDir ? dateString
@@ -74,6 +78,7 @@ Row {
             truncationMode: TruncationMode.Fade
             font.pixelSize: Theme.fontSizeExtraSmall
             color: highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
+            textFormat: nameLabel.textFormat
         }
     }
 }
