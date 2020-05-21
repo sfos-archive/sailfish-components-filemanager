@@ -253,6 +253,15 @@ Page {
                     }
 
                     MenuItem {
+                        //% "Rename"
+                        text: qsTrId("filemanager-me-rename")
+                        onClicked: pageStack.animatorPush("RenameDialog.qml", {
+                                                      oldPath: model.absolutePath,
+                                                      oldName: model.fileName
+                                                  })
+                    }
+
+                    MenuItem {
                         //% "Copy"
                         text: qsTrId("filemanager-me-copy")
                         onClicked: FileEngine.copyFiles([ fileModel.fileNameAt(model.index) ])
