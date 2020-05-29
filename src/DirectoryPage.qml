@@ -230,7 +230,7 @@ Page {
                 }
             }
 
-            FileItem {
+            InternalFileItem {
                 id: fileItem
             }
 
