@@ -82,7 +82,7 @@ Page {
                 }
             }
 
-            FileItem {
+            InternalFileItem {
                 id: fileItem
 
                 compressed: !model.extracted
