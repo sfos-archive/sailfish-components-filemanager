@@ -12,36 +12,17 @@ Dialog {
 
     property alias oldPath: fileInfo.file
 
+    readonly property string _newPath: fileName.text !== "" && !_hasInvalidCharacters
+            ? fileInfo.directoryPath + "/" + fileName.text
+            : ""
+
     readonly property var _regExp: new RegExp("[\/*\?<>\|]+")
+    readonly property bool _hasInvalidCharacters: _regExp.test(fileName.text)
+    readonly property bool _exists: _newPath !== "" && _newPath !== oldPath && FileEngine.exists(_newPath)
 
     function _suffixForFileName(fileName) {
         var suffix = FileEngine.extensionForFileName(fileName)
         return suffix !== "" ?  "." + suffix : suffix
-    }
-
-    function _renameFile(fileName) {
-        var newPath = fileInfo.directoryPath + '/' + fileName
-
-        if (newPath === oldPath) {
-            return
-        } else if (FileEngine.exists(newPath)) {
-            var suffix = _suffixForFileName(fileName)
-
-            var baseName = fileName.slice(0, fileName.length - suffix.length)
-
-            var counter = 0
-            do {
-                counter++
-                var incrementedFileName = baseName + "(%1)".arg(counter) + suffix
-
-                newPath = fileInfo.directoryPath + '/' + incrementedFileName
-
-                if (newPath === oldPath) {
-                    return
-                }
-            } while (FileEngine.exists(newPath))
-        }
-        FileEngine.rename(oldPath, newPath)
     }
 
     FileInfo {
@@ -59,11 +40,18 @@ Dialog {
 
         width: parent.width
         anchors.top: dialogHeader.bottom
-        label: errorHighlight
+        label: {
+            if (dialog._hasInvalidCharacters) {
                //% "Invalid file name"
-               ? qsTrId("filemanager-te-invalid_filename")
+               return qsTrId("filemanager-te-invalid_filename")
+            } else if (dialog._exists) {
+                //% "A file with the same name exists"
+                return qsTrId("filemanager-te-filename_exists")
+            } else {
                //% "Title"
-               : qsTrId("filemanager-la-title")
+               return qsTrId("filemanager-la-title")
+            }
+        }
 
         placeholderText: qsTrId("filemanager-la-title")
         onFocusChanged: {
@@ -75,7 +63,7 @@ Dialog {
         }
 
         text: fileInfo.fileName
-        errorHighlight: dialog._regExp.test(text)
+        errorHighlight: dialog._hasInvalidCharacters || dialog._exists
 
         EnterKey.iconSource: "image://theme/icon-m-enter-accept"
         EnterKey.enabled: text !== ""
@@ -86,6 +74,10 @@ Dialog {
         }
     }
 
-    canAccept: !fileName.errorHighlight && fileName.text !== ""
-    onAccepted: _renameFile(fileName.text)
+    canAccept: _newPath !== "" && !_exists
+    onAccepted: {
+        if (_newPath !== oldPath) {
+            FileEngine.rename(oldPath, _newPath)
+        }
+    }
 }
