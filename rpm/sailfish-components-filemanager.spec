@@ -1,8 +1,7 @@
 Name:       sailfish-components-filemanager
 Summary:    Sailfish File Manager UI components
-Version:    0.1.19
+Version:    0.2.24
 Release:    1
-Group:      System/Libraries
 License:    Proprietary
 URL:        https://bitbucket.org/jolla/ui-sailfish-components-filemanager
 Source0:    %{name}-%{version}.tar.bz2
@@ -15,7 +14,7 @@ BuildRequires:  qt5-qttools-linguist
 
 Requires: sailfishsilica-qt5 >= 1.1.75
 Requires: sailfish-content-graphics
-Requires: nemo-qml-plugin-filemanager >= 0.1.18
+Requires: nemo-qml-plugin-filemanager >= 0.1.30
 Requires: nemo-qml-plugin-notifications-qt5
 
 %description
@@ -23,7 +22,6 @@ Requires: nemo-qml-plugin-notifications-qt5
 
 %package ts-devel
 Summary:   Translation source for sailfish-components-filemanager
-Group:     System/Libraries
 
 %description ts-devel
 %{summary}.
