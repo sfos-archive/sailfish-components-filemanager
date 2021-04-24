@@ -1,11 +1,12 @@
 /*
  * Copyright (c) 2016 – 2019 Jolla Ltd.
- * Copyright (c) 2019 Open Mobile Platform LLC.
+ * Copyright (c) 2019 - 2021 Open Mobile Platform LLC.
  *
  * License: Proprietary
  */
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import Sailfish.Share 1.0
 import Nemo.FileManager 1.0
 import Sailfish.FileManager 1.0
 
@@ -265,11 +266,12 @@ Page {
                         //% "Share"
                         text: qsTrId("filemanager-me-share")
                         onClicked: {
-                            pageStack.animatorPush("Sailfish.TransferEngine.SharePage", {
-                                               source: FileManager.pathToUrl(model.absolutePath),
-                                               mimeType: model.mimeType,
-                                               serviceFilter: ["sharing", "e-mail"]
-                                           })
+                            shareAction.resources = [FileManager.pathToUrl(model.absolutePath)]
+                            shareAction.trigger()
+                        }
+
+                        ShareAction {
+                            id: shareAction
                         }
                     }
 
