@@ -12,7 +12,7 @@ SOURCES += plugin.cpp
 
 QML_FILES =  *.qml *.js
 
-import.files = $${QML_FILES} qmldir
+import.files = $${QML_FILES} qmldir plugins.qmltypes
 import.path = $$TARGETPATH
 target.path = $$TARGETPATH
 
@@ -47,3 +47,10 @@ QMAKE_EXTRA_TARGETS += translations engineering_english
 PRE_TARGETDEPS += translations engineering_english
 
 INSTALLS += target import translations_install engineering_english_install 
+
+# HACK: pass -nocomposites to work around the issue with types leaked
+# (mostly) from Silica. All of these are composite types and we have no other
+# composite types.
+qmltypes.commands = qmlplugindump -nonrelocatable -nocomposites \
+         Sailfish.FileManager 1.0 > $$PWD/plugins.qmltypes
+QMAKE_EXTRA_TARGETS += qmltypes
