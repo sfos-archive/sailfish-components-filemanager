@@ -2,8 +2,8 @@ Name:       sailfish-components-filemanager
 Summary:    Sailfish File Manager UI components
 Version:    0.2.24
 Release:    1
-License:    Proprietary
-URL:        https://bitbucket.org/jolla/ui-sailfish-components-filemanager
+License:    BSD
+URL:        https://github.com/sailfishos/sailfish-components-filemanager
 Source0:    %{name}-%{version}.tar.bz2
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)
@@ -42,6 +42,7 @@ rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
+%license LICENSE.BSD
 %{_libdir}/qt5/qml/Sailfish/FileManager
 %{_datadir}/translations/sailfish_components_filemanager_eng_en.qm
 
